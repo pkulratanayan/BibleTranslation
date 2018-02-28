@@ -42,13 +42,11 @@ export class Setup extends React.Component {
         }
     }
 
-    getBibleUrl(lookupName, chapter, fromVerse, toVerse, version) {
-        let url = 'http://getbible.net/json?passage='
-            + lookupName
-            + chapter
-            + ':' + fromVerse + '-' + toVerse + '&version=' + version;
-        console.log('url:' + url);
-        return url;
+    getBibleContent(lookupName, chapter, fromVerse, toVerse, version)
+    {
+        // <TODO>Implement here</TODO>
+        let bibleJsonContent = null;
+        return bibleJsonContent;
     }
 
     async handleTranslate() {
@@ -56,22 +54,18 @@ export class Setup extends React.Component {
             let wholeContentArray = [];
             await Promise.all(this.state.setupContentsEngToThai.map(async function (setupItem) {
                 let lookupName = bibleIndices[setupItem.bookIndex].lookupName;
-                let url = this.getBibleUrl(lookupName,
+                let bibleContent = this.getBibleContent(lookupName,
                     setupItem.chapter,
                     setupItem.fromVerse,
                     setupItem.toVerse,
                     BIBLE_VERSION.THAI);
-                let response = await fetch(url);
-                let bodyInit = response._bodyInit;
-                bodyInit = bodyInit.substring(1);
-                bodyInit = bodyInit.substring(0, bodyInit.length - 2);
-                let responseObject = JSON.parse(bodyInit);
+
                 let bibleIndex = bibleIndices[setupItem.bookIndex];
                 let englishName = bibleIndex.englishName;
                 let thaiName = bibleIndex.thaiName;
                 let wholeContent = 'book(eng/thai):' + englishName + '/' + thaiName + ', chapter:' + setupItem.chapter + '\n';
                 for (let i = setupItem.fromVerse; i <= setupItem.toVerse; i++) {
-                    wholeContent += 'verse:' + i + responseObject.book[0].chapter[i]['verse'];
+                    wholeContent += 'verse:' + i + bibleContent.book[0].chapter[i]['verse'];
                 }
                 wholeContentArray.push(wholeContent);
             }, this));
@@ -84,22 +78,17 @@ export class Setup extends React.Component {
             let wholeContentArray = [];
             await Promise.all(this.state.setupContentsThaiToEng.map(async function (setupItem) {
                 let lookupName = bibleIndices[setupItem.bookIndex].lookupName;
-                let url = this.getBibleUrl(lookupName,
+                let bibleContent = this.getBibleContent(lookupName,
                     setupItem.chapter,
                     setupItem.fromVerse,
                     setupItem.toVerse,
                     BIBLE_VERSION.AMERICAN_STANDARD);
-                let response = await fetch(url);
-                let bodyInit = response._bodyInit;
-                bodyInit = bodyInit.substring(1);
-                bodyInit = bodyInit.substring(0, bodyInit.length - 2);
-                let responseObject = JSON.parse(bodyInit);
                 let bibleIndex = bibleIndices[setupItem.bookIndex];
                 let englishName = bibleIndex.englishName;
                 let thaiName = bibleIndex.thaiName;
                 let wholeContent = 'book(eng/thai):' + englishName + '/' + thaiName + ', chapter:' + setupItem.chapter + '\n';
                 for (let i = setupItem.fromVerse; i <= setupItem.toVerse; i++) {
-                    wholeContent += 'verse:' + i + responseObject.book[0].chapter[i]['verse'];
+                    wholeContent += 'verse:' + i + bibleContent.book[0].chapter[i]['verse'];
                 }
                 wholeContentArray.push(wholeContent);
             }, this));
