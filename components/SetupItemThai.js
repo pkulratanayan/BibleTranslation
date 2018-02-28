@@ -3,6 +3,7 @@ import {StyleSheet, Text, View} from "react-native";
 import ModalDropdown from 'react-native-modal-dropdown';
 import _ from 'lodash';
 import bibleIndices from '../resources/BibleIndices.json';
+import Swipeout from 'react-native-swipeout';
 
 
 export class SetupItemThai extends React.Component {
@@ -61,24 +62,37 @@ export class SetupItemThai extends React.Component {
     }
 
     render() {
+        const swipeSettings = {
+            autoClose: true,
+            right : [
+                {
+                    onPress:() => {
+                        this.props.removeListItemAction(this.props.index);
+                    },
+                    text: 'Delete', type: 'delete'
+                }
+            ]
+        };
         return (
-            <View style={styles.toolbar}>
-                <ModalDropdown style={styles.toolbarTitle} options={this.state.books} onSelect={(index, value) => this._onBookSelect(index, value)}>
-                    <Text>{this.props.item.bookIndex === null ? '..หนังสือ...' : bibleIndices[this.props.item.bookIndex].thaiName}</Text>
-                </ModalDropdown>
-                <ModalDropdown style={styles.toolbarTitle} options={this.state.chapters} disabled={this.state.chapters.length <= 0}
-                               onSelect={(index, value) => this._onChapterSelect(index, value)}>
-                    <Text>{this.props.item.chapter === null ? '..บท...' : this.props.item.chapter}</Text>
-                </ModalDropdown>
-                <ModalDropdown style={styles.toolbarTitle} options={this.state.fromVerses} disabled={this.state.fromVerses.length <= 0}
-                    onSelect={(index, value) => this._onFromVerseSelect(index, value)}>
-                    <Text>{this.props.item.fromVerse === null ? '..จาก วรรค...' : this.props.item.fromVerse}</Text>
-                </ModalDropdown>
-                <ModalDropdown style={styles.toolbarTitle} options={this.state.toVerses} disabled={this.state.toVerses.length <= 0}
-                    onSelect={(index, value) => this._onToVerseSelect(index, value)}>
-                    <Text>{this.props.item.toVerse === null ? '..ถึง วรรค...' : this.props.item.toVerse}</Text>
-                </ModalDropdown>
-            </View>
+            <Swipeout {...swipeSettings}>
+                <View style={styles.toolbar}>
+                    <ModalDropdown style={styles.toolbarTitle} options={this.state.books} onSelect={(index, value) => this._onBookSelect(index, value)}>
+                        <Text>{this.props.item.bookIndex === null ? '..หนังสือ...' : bibleIndices[this.props.item.bookIndex].thaiName}</Text>
+                    </ModalDropdown>
+                    <ModalDropdown style={styles.toolbarTitle} options={this.state.chapters} disabled={this.state.chapters.length <= 0}
+                                   onSelect={(index, value) => this._onChapterSelect(index, value)}>
+                        <Text>{this.props.item.chapter === null ? '..บท...' : this.props.item.chapter}</Text>
+                    </ModalDropdown>
+                    <ModalDropdown style={styles.toolbarTitle} options={this.state.fromVerses} disabled={this.state.fromVerses.length <= 0}
+                                   onSelect={(index, value) => this._onFromVerseSelect(index, value)}>
+                        <Text>{this.props.item.fromVerse === null ? '..จาก วรรค...' : this.props.item.fromVerse}</Text>
+                    </ModalDropdown>
+                    <ModalDropdown style={styles.toolbarTitle} options={this.state.toVerses} disabled={this.state.toVerses.length <= 0}
+                                   onSelect={(index, value) => this._onToVerseSelect(index, value)}>
+                        <Text>{this.props.item.toVerse === null ? '..ถึง วรรค...' : this.props.item.toVerse}</Text>
+                    </ModalDropdown>
+                </View>
+            </Swipeout>
         );
     }
 }

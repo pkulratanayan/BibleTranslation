@@ -126,11 +126,30 @@ export class Setup extends React.Component {
         });
     }
 
+    handleChildDeleteEngToThai(index)
+    {
+        let currentSetupContents = this.state.setupContentsEngToThai;
+        currentSetupContents.splice(index, 1);
+        this.setState({
+            setupContentsEngToThai: currentSetupContents
+        });
+    }
+
+    handleChildDeleteThaiToEng(index)
+    {
+        let currentSetupContents = this.state.setupContentsThaiToEng;
+        currentSetupContents.splice(index, 1);
+        this.setState({
+            setupContentsThaiToEng: currentSetupContents
+        });
+    }
+
     renderItemEngToThai(data) {
         let {item, index} = data;
         console.log('renderItemEngToThai : item:' + JSON.stringify(item) + ',index:' + index);
         return (
             <SetupItemEng item={item} index={index}
+                          removeListItemAction={(index) => this.handleChildDeleteEngToThai(index)}
                           action={(index, setupItem) => this.handleChildUpdateEngToThai(index, setupItem)}/>
         )
     };
@@ -140,6 +159,7 @@ export class Setup extends React.Component {
         // console.log('renderItemThaiToEng : item:' + JSON.stringify(item) + ',index:' + index);
         return (
             <SetupItemThai item={item} index={index}
+                           removeListItemAction={(index) => this.handleChildDeleteThaiToEng(index)}
                            action={(index, setupItem) => this.handleChildUpdateThaiToEng(index, setupItem)}/>
         )
     };
