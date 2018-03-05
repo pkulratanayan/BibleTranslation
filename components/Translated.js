@@ -1,6 +1,7 @@
 import React from 'react';
-import {Text, View, StyleSheet, FlatList, SegmentedControlIOS} from "react-native";
+import {Text, View, StyleSheet, FlatList, SegmentedControlIOS, Button} from "react-native";
 import {TranslatedItem} from "./TranslatedItem";
+import {email} from "react-native-communications";
 
 export class Translated extends React.Component {
     constructor(props) {
@@ -11,9 +12,17 @@ export class Translated extends React.Component {
     }
 
     renderTranslatedItem(data) {
-        let {item} = data;
+        let {item, index} = data;
+        let colors = ['#e0e0e0', '#a0a0a0'];
+        console.log('index:' + index);
+        let style = [
+            styles.row,
+            {'backgroundColor': colors[index % colors.length]}
+        ];
         return (
-            <TranslatedItem item={item}/>
+            <View style={style}>
+                <TranslatedItem item={item}/>
+            </View>
         )
     }
 
@@ -40,6 +49,14 @@ export class Translated extends React.Component {
         }
     }
 
+    sendEmail() {
+        email(null,
+            null,
+            null,
+            this.state.selectedTab === 'ENG => THA' ? 'For Eng service' : 'For Thai service',
+            this.state.selectedTab === 'ENG => THA' ? this.props.engToThaiConents : this.props.thaiToEngContents);
+    }
+
     render() {
         return (
             <View style={styles.container}>
@@ -55,6 +72,7 @@ export class Translated extends React.Component {
                         }}
                     />
                 </View>
+                <Button title="EMAIL" style={styles.toolbarButton} onPress={() => this.sendEmail()}/>
                 {this.renderTranslatedList()}
             </View>
         );
