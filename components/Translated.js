@@ -1,7 +1,9 @@
 import React from 'react';
-import {Text, View, StyleSheet, FlatList, SegmentedControlIOS, Button} from "react-native";
+import {View, StyleSheet, FlatList, SegmentedControlIOS, Button} from "react-native";
 import {TranslatedItem} from "./TranslatedItem";
 import {email} from "react-native-communications";
+import _ from 'lodash'
+
 
 export class Translated extends React.Component {
     constructor(props) {
@@ -24,6 +26,15 @@ export class Translated extends React.Component {
                 <TranslatedItem item={item}/>
             </View>
         )
+    }
+
+    convertListToEmail(contents) {
+        let transformed = _.chain(contents)
+            .map(item => '<p>' + item + '</p>')
+            .value();
+        let final =  transformed.join('\n');
+        console.log(final);
+        return final;
     }
 
     renderTranslatedList() {
@@ -54,7 +65,7 @@ export class Translated extends React.Component {
             null,
             null,
             this.state.selectedTab === 'ENG => THA' ? 'For Eng service' : 'For Thai service',
-            this.state.selectedTab === 'ENG => THA' ? this.props.engToThaiConents : this.props.thaiToEngContents);
+            this.state.selectedTab === 'ENG => THA' ? this.convertListToEmail(this.props.engToThaiContents) : this.convertListToEmail(this.props.thaiToEngContents));
     }
 
     render() {
